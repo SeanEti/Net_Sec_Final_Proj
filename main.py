@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import random
 import seaborn as sns
 from operator import add
-np.random.seed(911)
+np.random.seed(1110112)
 
 # Write client selection choices into a logfile
 f = open("logfile.txt", "a")
@@ -397,6 +397,7 @@ if __name__ == '__main__':
 
     # ---------------------------------------
     # Initializing key parameters:
+    # Note: there are 40 potential clients in the simulation
 
     queuq_len_per_test = []
     queuqe_len_list = []
@@ -450,38 +451,40 @@ if __name__ == '__main__':
     Tau_max_list.append(Tau_max_per_test)
     print("Done!")
 
+    plt.figure(1)
+    plt.title("Pull record of arms under different client-selection strategies")
+
     ylabels = ['random', 'RBCS-F(5)', 'RBCS-F(20)', 'RBCS-F(50)', 'FedCS(3)']
-    xlabels = [x for x in range(0, 41, 2)]
-    sns.heatmap(num_clients_chosen, xticklabels=xlabels, yticklabels=ylabels,
-                vmin=0, vmax=400, cmap='coolwarm')
+    xlabels = [i*2 for i in range(1, 21)]
+    xticks = [i for i in range(20)]
+    plt.xticks(xticks, xlabels, rotation=0)
+    heatmap = sns.heatmap(num_clients_chosen, yticklabels=ylabels, vmin=0, vmax=400, cmap='coolwarm')
+    plt.ylabel('Selection Methods')
+    plt.xlabel('Clients')
+    plt.tight_layout()
+    plt.show(block=False)
 
-    plt.xticks(range(0, len(queuqe_len_list) + 1, 2))  # set the tick frequency on x-axis
-    plt.ylabel('Selection Methods')  # set the label for y axis
-    plt.xlabel('Clients')  # set the label for x-axis
-    plt.title("Pull record of arms under different client-selection strategies")  # set the title of the graph
-    plt.legend(['RBCS-F(5)', 'RBCS-F(10)', 'RBCS-F(20)', 'RBCS-F(50)'])
-    plt.show()  # display the graph
-
+    plt.figure(2)
     for plotGraph in queuqe_len_list:
-        plt.plot(plotGraph)  # plot the data
+        plt.plot(plotGraph)
 
-    plt.xticks(range(0, len(queuq_len_per_test) + 1, 100))  # set the tick frequency on x-axis
-    plt.ylabel('Total Queue Length')  # set the label for y axis
-    plt.xlabel('Federated Rounds')  # set the label for x-axis
-    plt.title("The impact of V on the convergence of the queues")  # set the title of the graph
+    plt.xticks(range(0, 501, 100))
+    plt.ylabel('Total Queue Length')
+    plt.xlabel('Federated Rounds')
+    plt.title("The impact of V on the convergence of the queues")
     plt.legend(['RBCS-F(5)', 'RBCS-F(10)', 'RBCS-F(20)', 'RBCS-F(50)'])
-    plt.show()  # display the graph
+    plt.show(block=False)
 
+    plt.figure(3)
     for plotGraph in Tau_max_list:
-        plt.plot(plotGraph)  # plot the data
+        plt.plot(plotGraph)
 
-    plt.xticks(range(0, len(Tau_max_per_test) + 1, 100))  # set the tick frequency on x-axis
-
-    plt.ylabel('Time Consumption(s)')  # set the label for y axis
-    plt.xlabel('Federated Rounds')  # set the label for x-axis
-    plt.title("Training time of different client-selection strategies")  # set the title of the graph
+    plt.xticks(range(0, 501, 100))
+    plt.ylabel('Time Consumption(s)')
+    plt.xlabel('Federated Rounds')
+    plt.title("Training time of different client-selection strategies")
     plt.legend(['random', 'RBCS-F(5)', 'RBCS-F(20)', 'RBCS-F(50)', 'FedCS(3)'])
-    plt.show()  # display the graph
+    plt.show()
 
     # ---------------------------------------
 
